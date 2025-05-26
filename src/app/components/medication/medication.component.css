@@ -1,0 +1,92 @@
+.grid-container {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10vw;
+    margin-right: 10vw;
+}
+
+/* Styling for the Kendo grid */
+.k-grid {
+    border: 1px solid #ccc;
+}
+
+/* Styling for the navigation footer */
+nav {
+    background-color: #ADEFD1FF;
+    padding: 0px 10px 10px;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-radius: 10px;
+    text-align: center;
+}
+
+/* Styling for the title */
+.nav-title {
+    font-size: 16px;
+}
+
+.btn-wide {
+    width: 150px;
+}
+
+.example-wrapper {
+    min-height: 50vh;
+    align-content: flex-start;
+}
+
+.example-wrapper p,
+.example-col p {
+    margin: 0 0 10px;
+}
+
+.example-wrapper p:first-child,
+.example-col p:first-child {
+    margin-top: 0;
+}
+
+.example-col {
+    display: inline-block;
+    vertical-align: top;
+    padding-right: 20px;
+    padding-bottom: 20px;
+}
+
+.example-config {
+    margin: 0 0 20px;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+::ng-deep .k-dialog-titlebar {
+    text-align: center;
+    background-color: #ADEFD1FF;
+    color: black;
+}
+
+.big-checkbox {
+    transform: scale(1.5); 
+    margin-top: 4vh;
+}
+
+
+.event-log {
+    margin: 0;
+    padding: 0;
+    max-height: 100px;
+    overflow-y: auto;
+    list-style-type: none;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background-color: #fff;
+}
+
+.event-log li {
+    margin: 0;
+    padding: 0.3em;
+    line-height: 1.2em;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.event-log li:last-child {
+    margin-bottom: -1px;
+}

@@ -1,0 +1,54 @@
+<!-- Example: app.component.html -->
+<!-- <div>
+    <h1>Welcome to Voice Alerts App!</h1>
+    
+</div> -->
+<div class="ml-3 mr-3">
+    <div class="mb-3 col-sm-2">
+        <kendo-label text="Years">
+            <kendo-dropdownlist class="mt-1" [(ngModel)]="selectedYear" [data]="years"
+                (valueChange)="filterByYear($event)"></kendo-dropdownlist>
+        </kendo-label>
+    </div>
+
+    <div style="display: flex;">
+        <kendo-chart style="height: 60vh; width: 48vw;" [seriesColors]="chartColorCodes">
+            <kendo-chart-title text="Medication Adherence"></kendo-chart-title>
+            <kendo-chart-category-axis>
+                <kendo-chart-category-axis-item [categories]="getMonths() | async"></kendo-chart-category-axis-item>
+            </kendo-chart-category-axis>
+
+            <kendo-chart-series>
+                <kendo-chart-series-item type="column" [data]="getPercentages() | async"
+                    name="Months"></kendo-chart-series-item>
+            </kendo-chart-series>
+
+            <kendo-chart-value-axis>
+                <kendo-chart-value-axis-item [title]="{ text: 'Adherence Rates (%)' }"></kendo-chart-value-axis-item>
+            </kendo-chart-value-axis>
+
+            <kendo-chart-legend position="bottom" orientation="horizontal"></kendo-chart-legend>
+
+            <kendo-chart-tooltip format="{0}%"></kendo-chart-tooltip>
+        </kendo-chart>
+
+        <kendo-chart style="height: 60vh; width: 48vw;" class="ml-2" [seriesColors]="chartColorCodes">
+            <kendo-chart-title text="Patient Incidents"></kendo-chart-title>
+            <kendo-chart-category-axis>
+                <kendo-chart-category-axis-item [categories]="monthsForIncidents"></kendo-chart-category-axis-item>
+            </kendo-chart-category-axis>
+
+            <kendo-chart-series>
+                <kendo-chart-series-item type="line" [data]="incidentCount" name="Months"></kendo-chart-series-item>
+            </kendo-chart-series>
+
+            <kendo-chart-value-axis>
+                <kendo-chart-value-axis-item [title]="{ text: 'Incident Frequency (#)' }" [min]="0" [majorUnit]="1"></kendo-chart-value-axis-item>
+            </kendo-chart-value-axis>
+
+            <kendo-chart-legend position="bottom" orientation="horizontal"></kendo-chart-legend>
+
+            <kendo-chart-tooltip format="{0}"></kendo-chart-tooltip>
+        </kendo-chart>
+    </div>
+</div>

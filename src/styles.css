@@ -1,0 +1,27 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+.btn-info, .btn-info:hover, .btn-info:active, .btn-info:disabled {
+    background-color: #00203FFF !important;
+}
+
+.btn-light, .btn-light:hover, .btn-light:active, .btn-light:disabled {
+    background-color: aliceblue !important
+}
+
+.k-checkbox:checked,
+.k-checkbox.k-checked {
+    border-color: #00203FFF;
+    color: white;
+    background-color: #00203FFF;
+}
+
+.k-list-item.k-selected,.k-selected.k-list-optionlabel {
+    color: #fff;
+    background-color: #00203FFF;
+}

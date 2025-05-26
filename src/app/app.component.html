@@ -1,0 +1,26 @@
+<app-notification></app-notification>
+<nav class="navbar navbar-expand navbar-dark bg-cadetblue">
+  <div class="navbar-nav flex-grow-1">
+    <ng-container *ngIf="currentUser; else notLoggedInNavbar">
+      <a class="nav-item nav-link text-white" routerLink="/" routerLinkActive="active">Home</a>
+      <a class="nav-item nav-link text-white" routerLink="/medication" routerLinkActive="active">Medication</a>
+      <a class="nav-item nav-link text-white" routerLink="/incidents" routerLinkActive="active">Incidents</a>
+      <a class="nav-item nav-link text-white" routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+      <div class="nav-item ml-auto">
+        <a class="nav-link text-white" (click)="logout()">Logout</a>
+      </div>
+    </ng-container>
+    <ng-template #notLoggedInNavbar>
+      <div class="navbar-brand text-center flex-grow-1 text-white">CareConnect</div>
+    </ng-template>
+  </div>
+</nav>
+
+<div class="mt-5" style="overflow-x: hidden;">
+  <div class="row">
+    <div class="col-sm-12 justify-content-center">
+      <app-voice-alerts></app-voice-alerts>
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

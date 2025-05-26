@@ -1,0 +1,140 @@
+<app-loader *ngIf="isLoading"></app-loader>
+<app-notification></app-notification>
+<nav class="grid-container">
+    <h2 class="nav-title mt-1 p-1">Patient Medication</h2>
+    <kendo-grid [data]="medicationData" [height]="450"
+        [selectable]="{enabled: true, checkboxOnly: true, mode: 'single'}"
+        (selectionChange)="onSelectionChange($event)">
+        <kendo-grid-checkbox-column width="50"></kendo-grid-checkbox-column>
+        <kendo-grid-column field="id" title="Id" [hidden]="true" width="200"></kendo-grid-column>
+        <kendo-grid-column field="medicationName" title="Medication Name" width="180"></kendo-grid-column>
+        <kendo-grid-column field="status" title="Status" width="80"></kendo-grid-column>
+        <kendo-grid-column field="dosage" title="Dosage" width="140"></kendo-grid-column>
+        <kendo-grid-column field="frequency" title="Frequency" width="80"></kendo-grid-column>
+        <kendo-grid-column field="route" title="Route" width="80"></kendo-grid-column>
+        <kendo-grid-column field="startDate" title="Start Date" width="100">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                {{ dataItem.startDate | kendoDate:'MMM dd, yyyy' }}
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="endDate" format="d" title="End Date" width="100">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                {{ '-' }}
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="intervals" title="Reminders" width="80"></kendo-grid-column>
+        <kendo-grid-column field="reminderInterval" title="Reminder Interval" width="150"></kendo-grid-column>
+    </kendo-grid>
+</nav>
+
+<div class="button-container d-flex justify-content-center mt-5">
+    <button class="btn btn-info mr-3 btn-wide" (click)="openReminderDialog()" [disabled]="selectedItems.length == 0">Reminder</button>
+    <button class="btn btn-light btn-wide" (click)="openMedicationAdherence()" [disabled]="selectedItems.length == 0">Adherence</button>
+</div>
+
+
+<div *ngIf="dialogOpened">
+    <kendo-dialog title="Set Reminder" (close)="dialogOpened=false;" [height]="auto" [width]="450"
+        [themeColor]="dialogThemeColor">
+        <form [formGroup]="reminderForm" (ngSubmit)="setReminders()">
+            <div style="margin: 0 30px;">
+                <div class="mb-3">
+                    <kendo-label text="First Interval">
+                        <kendo-timepicker class="mt-1" formControlName="firstInterval"></kendo-timepicker>
+                    </kendo-label>
+                    <div *ngIf="submitted && f.firstInterval.errors" class="invalid-feedback" style="display: block;">
+                        <div *ngIf="f.firstInterval.errors.required">First interval is required</div>
+                    </div>
+                </div>
+                <div class="mb-3" *ngIf="timeIntervals > 1">
+                    <kendo-label text="Second Interval" >
+                        <kendo-timepicker class="mt-1" formControlName="secondInterval"></kendo-timepicker>
+                    </kendo-label>
+                    <div *ngIf="submitted && f.secondInterval.errors" class="invalid-feedback" style="display: block;">
+                        <div *ngIf="f.secondInterval.errors.required">Second interval is required</div>
+                    </div>
+                </div>
+                <div class="mb-3" *ngIf="timeIntervals > 2">
+                    <kendo-label text="Third Interval">
+                        <kendo-timepicker class="mt-1" formControlName="thirdInterval"></kendo-timepicker>
+                    </kendo-label>
+                    <div *ngIf="submitted && f.secondInterval.errors" class="invalid-feedback" style="display: block;">
+                        <div *ngIf="f.secondInterval.errors.required">Third interval is required</div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <kendo-label text="Reminder Interval">
+                        <kendo-dropdownlist class="mt-1" formControlName="reminderInterval" [data]="reminderTimes"
+                            textField="text" valueField="value"></kendo-dropdownlist>
+                    </kendo-label>
+                    <div *ngIf="submitted && f.reminderInterval.errors" class="invalid-feedback" style="display: block;">
+                        <div *ngIf="f.reminderInterval.errors.required">Reminder interval is required</div>
+                    </div>
+                </div>
+                <div class="button-container d-flex justify-content-center">
+                    <button class="btn btn-info mr-3" type="submit" [disabled]="reminderForm.invalid">Save</button>
+                    <button class="btn btn-light" (click)="dialogOpened=false;">Cancel</button>
+                </div>
+            </div>
+        </form>
+    </kendo-dialog>
+</div>
+
+
+<div *ngIf="adherenceDialog">
+    <kendo-dialog title="Medication Adherence" (close)="adherenceDialog=false;" [height]="auto" [width]="450"
+        [themeColor]="dialogThemeColor">
+        <div style="margin: 0 30px;">
+            <div class="mb-3">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <kendo-label text="Medication Date">
+                            <kendo-datepicker placeholder="Choose a date" [(ngModel)]="adherenceDate"
+                                class="mt-1"></kendo-datepicker>
+                        </kendo-label>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="row">
+                    <div class="col-sm-10">
+                        <kendo-label text="First Interval">
+                            <kendo-timepicker [(ngModel)]="firstAdherenceInterval" class="mt-1"></kendo-timepicker>
+                        </kendo-label>
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="checkbox" kendoCheckBox [(ngModel)]="firstIntervalIntake" class="big-checkbox" />
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3" *ngIf="timeIntervals > 1">
+                <div class="row">
+                    <div class="col-sm-10">
+                        <kendo-label text="Second Interval">
+                            <kendo-timepicker [(ngModel)]="secondAdherenceInterval" class="mt-1"></kendo-timepicker>
+                        </kendo-label>
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="checkbox" kendoCheckBox [(ngModel)]="secondIntervalIntake" class="big-checkbox" />
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3" *ngIf="timeIntervals > 2">
+                <div class="row">
+                    <div class="col-sm-10">
+                        <kendo-label text="Third Interval">
+                            <kendo-timepicker [(ngModel)]="thirdAdherenceInterval" class="mt-1"></kendo-timepicker>
+                        </kendo-label>
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="checkbox" kendoCheckBox [(ngModel)]="thirdIntervalIntake" class="big-checkbox" />
+                    </div>
+                </div>
+            </div>
+            <div class="button-container d-flex justify-content-center">
+                <button class="btn btn-info mr-3" (click)="addAdherence()">Save</button>
+                <button class="btn btn-light" (click)="adherenceDialog=false;">Cancel</button>
+            </div>
+        </div>
+    </kendo-dialog>
+</div>

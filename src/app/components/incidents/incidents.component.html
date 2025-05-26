@@ -1,0 +1,79 @@
+<app-loader *ngIf="isLoading"></app-loader>
+<app-notification></app-notification>
+<nav class="grid-container">
+    <h2 class="nav-title mt-1 p-1">Patient Incidents</h2>
+    <kendo-grid [data]="incidentData" [height]="450">
+        <kendo-grid-column field="incidentDate" title="Incident Date" width="60">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                {{ dataItem.incidentDate | kendoDate:'MMM dd, yyyy' }}
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column field="description" title="Description" width="150"></kendo-grid-column>
+        <kendo-grid-column field="location" title="Location" width="60"></kendo-grid-column>
+        <kendo-grid-column field="severity" title="Severity" width="60"></kendo-grid-column>
+        <kendo-grid-column field="action" title="Action Taken" width="150"></kendo-grid-column>
+    </kendo-grid>
+</nav>
+
+<div class="button-container d-flex justify-content-center mt-5">
+    <button class="btn btn-info btn-wide mr-3" (click)="openIncidentForm()">Add Incidents</button>
+    <button class="btn btn-light btn-wide" (click)="updateIncidentData()">Update FHIR</button>
+</div>
+
+<div *ngIf="dialogOpened">
+    <kendo-dialog title="Add Incidents" (close)="dialogOpened=false;" [height]="auto" [width]="450"
+        [themeColor]="dialogThemeColor">
+        <div style="margin: 0 30px;">
+            <form [formGroup]="incidentForm" (ngSubmit)="saveIncidents()">
+                <div class="mb-3">
+                    <kendo-label text="Incident Date">
+                        <kendo-datepicker formControlName="incidentDate" placeholder="Choose a date"
+                            class="mt-1"></kendo-datepicker>
+                    </kendo-label>
+                    <div *ngIf="f.incidentDate.errors && f.incidentDate.touched" class="text-danger">
+                        <div *ngIf="f.incidentDate.errors.required">Incident date is required</div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <kendo-label text="Description">
+                        <kendo-textarea formControlName="description" placeholder="Tell us about the incident"
+                            [rows]="3" resizable="vertical" class="mt-1"></kendo-textarea>
+                    </kendo-label>
+                    <div *ngIf="f.description.errors && f.description.touched" class="text-danger">
+                        <div *ngIf="f.description.errors.required">Description is required</div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <kendo-label text="Location">
+                        <kendo-textbox formControlName="location" placeholder="Incident Location"
+                            class="mt-1"></kendo-textbox>
+                    </kendo-label>
+                    <div *ngIf="f.location.errors && f.location.touched" class="text-danger">
+                        <div *ngIf="f.location.errors.required">Location is required</div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <kendo-label text="Severity">
+                        <kendo-dropdownlist formControlName="severity" class="mt-1" [data]="incidentSeverity"
+                            textField="text" valueField="value"></kendo-dropdownlist>
+                    </kendo-label>
+                    <div *ngIf="f.severity.errors && f.severity.touched" class="text-danger">
+                        <div *ngIf="f.severity.errors.required">Severity is required</div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <kendo-label text="Action">
+                        <kendo-textbox formControlName="action" placeholder="Action Taken" class="mt-1"></kendo-textbox>
+                    </kendo-label>
+                    <div *ngIf="f.action.errors && f.action.touched" class="text-danger">
+                        <div *ngIf="f.action.errors.required">Action taken is required</div>
+                    </div>
+                </div>
+                <div class="button-container d-flex justify-content-center">
+                    <button class="btn btn-info mr-3" [disabled]="incidentForm.invalid">Save</button>
+                    <button class="btn btn-light" (click)="dialogOpened=false;">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </kendo-dialog>
+</div>
